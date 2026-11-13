@@ -5,6 +5,7 @@ run/
 .tools/
 .workbuddy-ai/
 docs/
+/PLAN.md
 *.iml
 .idea/
 .vscode/
