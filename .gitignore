@@ -4,6 +4,7 @@ out/
 run/
 .tools/
 .workbuddy-ai/
+docs/
 *.iml
 .idea/
 .vscode/
