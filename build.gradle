@@ -1,0 +1,90 @@
+plugins {
+	id 'net.fabricmc.fabric-loom' version "${loom_version}"
+	id 'maven-publish'
+}
+
+version = project.mod_version
+group = project.maven_group
+
+base {
+	archivesName = project.archives_base_name
+}
+
+loom {
+	splitEnvironmentSourceSets()
+
+	mods {
+		"handheldmusic" {
+			sourceSet sourceSets.main
+			sourceSet sourceSets.client
+		}
+	}
+}
+
+repositories {
+	maven {
+		name = "AliyunPublic"
+		url = "https://maven.aliyun.com/repository/public"
+	}
+	mavenCentral()
+}
+
+dependencies {
+	minecraft "com.mojang:minecraft:${project.minecraft_version}"
+	implementation "net.fabricmc:fabric-loader:${project.loader_version}"
+	implementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_api_version}"
+
+	// P0.3 音频解码：mp3spi 是 Java Sound 的 mp3 SPI 实现（内部用 jlayer 解码），
+	// 会把 AudioFileReader 注册进 ServiceLoader，之后 AudioSystem 就能直接认 mp3。
+	//
+	// ⚠️ 打包必须把三个 jar 全部 include：Loom 的 include 不会跟着传递依赖走，
+	// 只写 mp3spi 的话打出来的 jar 里没有解码器，装进 .minecraft/mods 一播放就崩。
+	implementation "com.googlecode.soundlibs:mp3spi:1.9.5.4"
+	include "com.googlecode.soundlibs:mp3spi:1.9.5.4"
+	include "com.googlecode.soundlibs:jlayer:1.0.1.4"
+	include "com.googlecode.soundlibs:tritonus-share:0.3.7.4"
+
+	// 二维码登录：游戏内渲染二维码需要 QR 编码器
+	implementation "com.google.zxing:core:3.5.3"
+	include "com.google.zxing:core:3.5.3"
+}
+
+processResources {
+	def version = project.version
+	inputs.property "version", version
+
+	filesMatching("fabric.mod.json") {
+		expand "version": version
+	}
+}
+
+tasks.withType(JavaCompile).configureEach {
+	it.options.release = 25
+	it.options.encoding = "UTF-8"
+}
+
+java {
+	withSourcesJar()
+
+	sourceCompatibility = JavaVersion.VERSION_25
+	targetCompatibility = JavaVersion.VERSION_25
+}
+
+jar {
+	def projectName = project.name
+	inputs.property "projectName", projectName
+
+	from("LICENSE") {
+		rename { "${it}_$projectName" }
+	}
+}
+
+publishing {
+	publications {
+		create("mavenJava", MavenPublication) {
+			from components.java
+		}
+	}
+	repositories {
+	}
+}

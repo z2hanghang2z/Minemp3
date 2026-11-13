@@ -1,0 +1,6 @@
+{
+	"model": {
+		"type": "minecraft:model",
+		"model": "handheldmusic:item/handheld_player"
+	}
+}

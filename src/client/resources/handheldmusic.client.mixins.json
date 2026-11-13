@@ -1,0 +1,13 @@
+{
+	"required": true,
+	"package": "com.handheldmusic.mixin.client",
+	"client": [
+		"SoundBufferLibraryMixin",
+		"SoundEngineAccessor",
+		"SoundManagerAccessor",
+		"ChannelAccessor"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}

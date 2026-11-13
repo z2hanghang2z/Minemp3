@@ -1,0 +1,34 @@
+{
+	"schemaVersion": 1,
+	"id": "handheldmusic",
+	"version": "${version}",
+	"name": "Handheld Music Player",
+	"description": "手持音乐播放器：在游戏内搜索、播放并控制音乐，手持即可操作。",
+	"authors": [
+		"handheldmusic"
+	],
+	"contact": {},
+	"license": "MIT",
+	"icon": "assets/handheldmusic/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			"com.handheldmusic.HandheldMusic"
+		],
+		"client": [
+			"com.handheldmusic.client.HandheldMusicClient"
+		]
+	},
+	"mixins": [
+		{
+			"config": "handheldmusic.client.mixins.json",
+			"environment": "client"
+		}
+	],
+	"depends": {
+		"fabricloader": ">=0.20.1",
+		"minecraft": "~26.3",
+		"java": ">=25",
+		"fabric-api": "*"
+	}
+}
